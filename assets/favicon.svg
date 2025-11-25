@@ -1,18 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212 212" width="32" height="32">
-<style>
-circle, path {
-  fill: none;
-  stroke-width: 15;
-}
-path {
-  stroke-width: 25;
-}
-</style>
-  <g transform="translate(6 6)">
-    <path d="M58 168V70a50 50 0 0 1 50-50h20" stroke="#98e6c8"/>
-    <path d="M58 168v-30a50 50 0 0 1 50-50h20" stroke="#0096bf"/>
-    <circle cx="142" cy="20" r="18" stroke="#98e6c8"/>
-    <circle cx="142" cy="88" r="18" stroke="#0096bf"/>
-    <circle cx="58" cy="180" r="18" stroke="#0096bf"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30.48 30.48"><defs><style>.cls-1{fill:#007bd0;stroke:#5a45ff;stroke-miterlimit:10;}.cls-2{fill:url(#r_31);}.cls-3{fill:#00cdd0;}</style><radialGradient id="r_31" cx="25.14" cy="14" r="3.18" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#646464"/><stop offset="1"/></radialGradient></defs><title>favicon</title><path class="cls-1" d="M29.08,1.12c-2.73-2.73-11.16,1.26-18.83,8.93S-1.41,26.14,1.32,28.88,12.49,27.62,20.16,20c.74-.74,1.45-1.49,2.12-2.24l.2-.23a.74.74,0,0,0-.27-1,.73.73,0,0,0-.79,0l-.25.28c-.51.56-1.05,1.12-1.61,1.69C13,25,5.87,28.64,3.71,26.49s1.45-9.25,8.05-15.84S25.45.45,27.6,2.6c1.14,1.15.66,3.68-1,6.79l0,.07a.71.71,0,0,0,1.18.77l.15-.27C30,6,30.62,2.66,29.08,1.12Z" transform="translate(0.04 0.24)"/><circle class="cls-2" cx="25.14" cy="14" r="3.18"/><path class="cls-3" d="M28.29,18c-.09-.18-.18-.37-.28-.55a.48.48,0,0,0-.32-.15c-.35,0-.63.48-.63,1.07a1.72,1.72,0,0,0,0,.39,4,4,0,0,1,.21.47c1.08,2.51,1.19,4.66.08,5.95-2.47,2.88-10,.45-16.86-5.42S.14,6.81,2.61,3.93s10-.44,16.86,5.43l.79.69.25.23a.87.87,0,0,0,1.2-1.2l-.31-.3-.22-.22C13.63,1.32,4.75-1.67,1.33,1.88S1.27,14.19,8.82,21.44s16.43,10.23,19.84,6.68C30.64,26.06,30.35,22.26,28.29,18Z" transform="translate(0.04 0.24)"/></svg>
