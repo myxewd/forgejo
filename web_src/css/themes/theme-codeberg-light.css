@@ -1,0 +1,21 @@
+/* Basic styles for Codeberg */
+@import "theme-gitea-light.css";
+@import "codeberg/base-brand.css";
+
+:root {
+  --color-link: #0651ba;
+}
+
+a, a:hover {
+  color: var(--color-link);
+}
+
+.ui.secondary.menu .active.item,
+.ui.secondary.menu .active.item {
+  background-color: var(--color-secondary-alpha-30);
+}
+
+footer a:hover {
+	--color-text-light-2: #73CCC6;
+	color: var(--color-text-light-2) !important;
+}
