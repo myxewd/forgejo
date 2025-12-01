@@ -83,8 +83,10 @@ let width = window.innerWidth,
 const ZOOM_SPEED = 0.1,
   MOVE_SPEED = 6,
   ZOOM_FINESSE = 200,
-  cellSize = Math.min(32, Math.floor(width / matrix[0].length - 2)),
+  cellSizeX = Math.min(24, Math.floor(width / matrix[0].length - 4)),
+  cellSizeY = Math.min(24, Math.floor(height / matrix.length - 8)),
   deltas = generateBezierSteps(ZOOM_FINESSE / 2, 0.6);
+const cellSize = Math.min(cellSizeX, cellSizeY);
 for (let a = deltas.length - 1; a >= 0; a--) deltas.push(-deltas[a]);
 window.addEventListener("resize", () => {
   width = window.innerWidth;
