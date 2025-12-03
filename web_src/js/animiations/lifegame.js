@@ -72,7 +72,7 @@ const matrix = [
       0, 0, 0, 0,
     ],
   ],
-  canvas = document.getElementById("gameCanvas"),
+  canvas = document.getElementById("indexDesktopCanvas"),
   ctx = canvas.getContext("2d");
 let width = window.innerWidth,
   height = window.innerHeight,
