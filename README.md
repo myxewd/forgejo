@@ -7,3 +7,9 @@ I cloned forgejo official repo, and modify the following parts.
 3. Public index page: remove forgejo information page and show a simple lifegame animiation on it
 
 Current version is based on forgejo 13.0.3
+
+## Build
+
+```bash
+docker buildx build --output=type=docker --tag forgejo:mybuild .
+```
