@@ -6,10 +6,10 @@ I cloned forgejo official repo, and modify the following parts.
 2. Logo: Changed to my own logo
 3. Public index page: remove forgejo information page and show a simple lifegame animiation on it
 
-Current version is based on forgejo 13.0.3
+Current version is based on forgejo 15.0.1
 
 ## Build
 
 ```bash
-docker buildx build --output=type=docker --tag forgejo:mybuild .
+docker build --build-arg RELEASE_VERSION=15.0.1.2000 -t forgejo:v15.0.1.2000 .
 ```
