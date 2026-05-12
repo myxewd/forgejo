@@ -109,3 +109,6 @@ prime/
 
 # Manpage
 /man
+
+# npm
+node_modules

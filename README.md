@@ -13,3 +13,14 @@ Current version is based on forgejo 15.0.1
 ```bash
 docker build --build-arg RELEASE_VERSION=15.0.1.2000 -t forgejo:v15.0.1.2000 .
 ```
+
+## Tips
+
+如果在构建过程中，出现 ESBuild 相关错误，可删除 node_modules 后重试。
+
+请不要忘记
+
+```bash
+make clean-all
+make generate-images
+```
