@@ -34,15 +34,20 @@ COPY . ${GOPATH}/src/forgejo.org
 WORKDIR ${GOPATH}/src/forgejo.org
 
 # Pin the version string that gets compiled into main.Version / main.ForgejoVersion.
-# Forgejo stores it in the database (table forgejo_sem_ver) via semver.SetVersionStringWithEngine()
-# on every migration, so it MUST be a valid semantic version. It must never be derived from git in
-# this repo: without tags `git describe --always` returns a bare commit hash ("d749ada7d4"), which is
-# not a semver, and the very first migration - the install - then fails with
+# Forgejo writes it into the database (table forgejo_sem_ver) on every migration and aborts the
+# migration when it cannot be parsed as a semantic version. A checkout without git tags makes
+# `git describe --always` return a bare commit hash ("d749ada7d4"), which is not a semver, so the
+# very first migration - the install - dies with
 #   migrate: SetVersionStringWithEngine: Malformed version: d749ada7d4+gitea-1.22.0
-RUN if [ -z "${RELEASE_VERSION}" ]; then \
-	  echo "ERROR: build with --build-arg RELEASE_VERSION=<semver>, e.g. 15.0.1.2000"; \
-	  exit 1; \
-	fi && echo "${RELEASE_VERSION}" > VERSION
+# and no admin account can ever be created. Never derive the version from git here.
+# Pass --build-arg RELEASE_VERSION=15.0.1.2000 (any semver works, e.g. 15.0.1.mod-1) to record a
+# real version. Without it the Makefile falls back to a visible "0.0.0-<commit>" dev version, which
+# is still semver-valid, so a plain `docker build .` keeps working.
+RUN if [ -n "${RELEASE_VERSION}" ]; then \
+      echo "${RELEASE_VERSION}" > VERSION; \
+    else \
+      echo "WARNING: no --build-arg RELEASE_VERSION, the binary will report 0.0.0-<commit>"; \
+    fi
 # Always (re)generate the embedded assets (templates/, public/, options/, migration/schemas)
 # from the sources inside the image. The previous "reuse bindata when possible" behaviour
 # (clean-no-bindata + FORGEJO_GENERATE_SKIP_HASH=true) silently baked whatever

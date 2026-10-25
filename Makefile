@@ -97,6 +97,19 @@ else
         FORGEJO_VERSION := $(FORGEJO_VERSION)+$(GITEA_COMPATIBILITY)
       endif
     endif
+    # A checkout without git tags makes `git describe --always` return a bare commit hash
+    # (e.g. "d749ada7d4"), which is not a semantic version. Forgejo stores this string in the
+    # database (table forgejo_sem_ver) through semver.SetVersionStringWithEngine() on every
+    # migration and aborts with "Malformed version: ..." when it cannot parse it. That kills the
+    # very first migration - the install - so no admin account can ever be created.
+    # Such versions are prefixed with 0.0.0- so that the build still produces a working binary;
+    # put the real version in the VERSION file or pass FORGEJO_VERSION=... to be accurate.
+    ifneq ($(FORGEJO_VERSION),)
+      ifeq ($(shell echo '$(FORGEJO_VERSION)' | grep -qE '^[0-9]+\.[0-9]+' && echo yes),)
+        $(warning FORGEJO_VERSION '$(FORGEJO_VERSION)' is not a semantic version (no git tags in this checkout?); falling back to '0.0.0-$(FORGEJO_VERSION)')
+        FORGEJO_VERSION := 0.0.0-$(FORGEJO_VERSION)
+      endif
+    endif
   endif
 endif
 FORGEJO_VERSION_MAJOR=$(shell echo $(FORGEJO_VERSION) | sed -e 's/\..*//')
