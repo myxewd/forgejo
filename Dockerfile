@@ -33,10 +33,26 @@ RUN apk --no-cache add build-base git nodejs npm
 COPY . ${GOPATH}/src/forgejo.org
 WORKDIR ${GOPATH}/src/forgejo.org
 
-RUN make clean-no-bindata
+# Pin the version string that gets compiled into main.Version / main.ForgejoVersion.
+# Forgejo stores it in the database (table forgejo_sem_ver) via semver.SetVersionStringWithEngine()
+# on every migration, so it MUST be a valid semantic version. It must never be derived from git in
+# this repo: without tags `git describe --always` returns a bare commit hash ("d749ada7d4"), which is
+# not a semver, and the very first migration - the install - then fails with
+#   migrate: SetVersionStringWithEngine: Malformed version: d749ada7d4+gitea-1.22.0
+RUN if [ -z "${RELEASE_VERSION}" ]; then \
+	  echo "ERROR: build with --build-arg RELEASE_VERSION=<semver>, e.g. 15.0.1.2000"; \
+	  exit 1; \
+	fi && echo "${RELEASE_VERSION}" > VERSION
+# Always (re)generate the embedded assets (templates/, public/, options/, migration/schemas)
+# from the sources inside the image. The previous "reuse bindata when possible" behaviour
+# (clean-no-bindata + FORGEJO_GENERATE_SKIP_HASH=true) silently baked whatever
+# modules/*/bindata.go happened to sit in the build context - i.e. files generated on the
+# developer's machine at some earlier, unrelated point in time - into the image. That makes
+# two images built from the very same commit contain different templates/static files.
+RUN make clean
 RUN make frontend
 RUN go build contrib/environment-to-ini/environment-to-ini.go && xx-verify environment-to-ini
-RUN LDFLAGS="-buildid=" make FORGEJO_GENERATE_SKIP_HASH=true RELEASE_VERSION=$RELEASE_VERSION GOFLAGS="-trimpath" go-check generate-backend static-executable && xx-verify gitea
+RUN LDFLAGS="-buildid=" make RELEASE_VERSION=$RELEASE_VERSION GOFLAGS="-trimpath" go-check generate-backend static-executable && xx-verify gitea
 
 # Copy local files
 COPY docker/root /tmp/local

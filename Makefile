@@ -263,6 +263,23 @@ ifeq ($(FORGEJO_VERSION),)
 	@echo 'In most cases this likely means you forgot to fetch git tags, you can fix this by executing `git fetch --tags`. If this is not possible and this is part of a custom build process, then you can set a specific version by writing it to $(STORED_VERSION_FILE) (This must be a semver compatible version).'
 	@false
 endif
+	@# FORGEJO_VERSION is written to the database (table forgejo_sem_ver) by semver.SetVersionStringWithEngine()
+	@# on every migration, and it must parse as a semantic version. A checkout without git tags makes
+	@# `git describe --always` return a bare commit hash (e.g. "d749ada7d4") which is not a semver, and then
+	@# the very first migration - the install - dies with
+	@#   migrate: SetVersionStringWithEngine: Malformed version: d749ada7d4+gitea-1.22.0
+	@# Fail here instead of shipping an image that cannot create its first account.
+	@if ! echo '$(FORGEJO_VERSION)' | grep -qE '^[0-9]+\.[0-9]+'; then \
+		echo "Error: FORGEJO_VERSION '$(FORGEJO_VERSION)' is not a valid semantic version"; \
+		echo "Forgejo stores this string in the database and rejects non-semver values, so the first"; \
+		echo "migration (the install page) fails and no admin account can be created."; \
+		echo "This usually means the checkout has no git tags, so git describe --always returned only a"; \
+		echo "commit hash. Fix it with one of:"; \
+		echo "  git fetch --tags                                      # preferred"; \
+		echo "  echo 15.0.1.2000 > $(STORED_VERSION_FILE)            # pin it, must be semver"; \
+		echo "  make FORGEJO_VERSION=15.0.1.2000 ...                  # pass it on the command line"; \
+		false; \
+	fi
 
 .PHONY: show-version-full
 show-version-full: verify-version
