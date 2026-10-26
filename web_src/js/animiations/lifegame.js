@@ -125,8 +125,11 @@ function draw() {
       ((ctx.fillStyle = "#4CAF50"),
       ctx.fillRect(h * a + offset.x, k * a + offset.y, a - 1, a - 1));
   }
-  drawGeneration();
+  // Epoch counter is intentionally hidden.
+  // drawGeneration();
 }
+// eslint-disable-next-line multiline-comment-style -- keep the archived Epoch renderer for reference
+/*
 function drawGeneration() {
   if (width < 200) {
     return;
@@ -186,6 +189,7 @@ function drawGeneration() {
     }
   }
 }
+*/
 let cells = new Map(),
   offset = { x: 0, y: 0 },
   isZooming = !1,
